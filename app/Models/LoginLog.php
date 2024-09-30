@@ -44,13 +44,15 @@ class LoginLog extends Model
      */
     public function scopeFilter($query, array $filters)
     {
-        return $query->when($filters['user_id'] ?? null, function ($query, $userId) {
+        return $query->when($filters['user'] ?? null, function ($query, $userId) {
             $query->where('user_id', $userId);
         })->when($filters['ip_address'] ?? null, function ($query, $ipAddress) {
             // Allow partial matching for IP address
             $query->where('ip_address', 'like', "%{$ipAddress}%");
         })->when($filters['action'] ?? null, function ($query, $action) {
             $query->where('action', $action);
+        })->when($filters['order_by'] ?? null, function ($query, $orderBy) {
+            $query->orderBy('id', $orderBy);
         });
     }
 }
