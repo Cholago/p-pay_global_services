@@ -2,7 +2,22 @@
     <AuthenicatedDashboardLayout>
         <div class="max-w-12xl mx-auto sm:px-6 lg:px-8">
             <Head title="Signin Logs" />
-            <h1 class="mb-8 text-3xl font-bold pl-2 sm:pl-0">Signin Logs</h1>   
+            <h1 class="mb-8 text-3xl font-bold pl-2 sm:pl-0">Signin Logs</h1>  
+            <div class="flex items-center justify-between mb-6 mx-2 sm:mx-0">
+                <Filters v-model="form.search" @reset="reset" class="mr-4 max-w-md">
+                    <label class="block text-gray-700">Order By</label>
+                    <select v-model="form.order_by" class="select-primary mt-1 w-full">
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
+                    </select>
+                    <label class="block text-gray-700">User Email</label>
+                    <select v-model="form.user" class="select-primary mt-1 w-full">
+                        <option :value="null" selected>All</option>
+                        <option v-for="user in users" :key="user.id" :value="user.id">{{ user.email }}</option>
+                    </select>
+                </Filters>
+            </div>
+
             <div class="bg-white rounded-md shadow overflow-x-auto">
                 <table class="w-full whitespace-nowrap">
                     <tr class="font-semibold">
@@ -44,7 +59,7 @@
 <script>
 import AuthenicatedDashboardLayout from "@/Layouts/AuthenicatedDashboardLayout.vue";
 import Pagination from "@/Components/Pagination.vue";
-import SearchFilter from "@/Components/SearchFilter.vue";
+import Filters from "@/Components/Filters.vue";
 import mapValues from 'lodash/mapValues';
 import throttle from 'lodash/throttle';
 import pickBy from 'lodash/pickBy';
@@ -56,18 +71,21 @@ export default {
         Head,
         Link,
         Pagination,
-        SearchFilter,
+        Filters,
         AuthenicatedDashboardLayout,
     },
     mixins: [General],
     props: {
         filters: Object,
         signinlogs: Object,
+        users: Array,
     },
     data() {
         return {
             form: {
                 search: this.filters.search,
+                user: this.filters.user,
+                order_by: this.filters.order_by,
             },
         };
     },

@@ -1,5 +1,6 @@
 <template>
     <div>
+        <div id="dropdown" />
         <TransitionRoot as="template" :show="sidebarOpen">
             <Dialog
                 as="div"
